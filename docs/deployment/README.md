@@ -1,5 +1,7 @@
 # Deployment guide
 
+For this repository's single-service Render setup, see [the complete Render walkthrough](render.md). The production API can serve the built frontend when started from the repository root after building both applications.
+
 No cloud resources have been created. Deployment requires explicit approval after reviewing the open acceptance items in PROGRESS.md.
 
 Use Node 24 LTS. Build with `npm ci && npm run build`. Serve `apps/web/dist` through a same-origin reverse proxy with SPA fallback and `/api` forwarding. Run `node apps/api/dist/server.js` for the bundled API, or build the API image using `docker build -f infrastructure/docker/api.Dockerfile .`. The image runs as a non-root user. Configure the load balancer to forward health probes to `/health` and readiness probes to `/ready`.

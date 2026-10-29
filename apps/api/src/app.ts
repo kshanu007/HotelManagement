@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import pinoHttp from 'pino-http';
 import mongoose from 'mongoose';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { APP, RATE_LIMIT_RESPONSE } from '@annapurna/constants';
 import { env } from './config/env.js';
 import { logger } from './config/logger.js';
@@ -18,6 +20,7 @@ import { asyncRoute } from './shared/helpers/http.js';
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', env.TRUST_PROXY_HOPS);
   app.use(helmet());
   app.use(cors({ origin: env.WEB_ORIGIN, credentials: true }));
   app.use(pinoHttp({ logger }));
@@ -53,6 +56,14 @@ export function createApp() {
   );
   app.use(`${APP.apiPrefix}/reports`, reportRouter);
   app.use(APP.apiPrefix, operationsRouter);
+  const webRoot = resolve(process.cwd(), 'apps/web/dist');
+  if (env.NODE_ENV === 'production' && existsSync(resolve(webRoot, 'index.html'))) {
+    app.use(express.static(webRoot));
+    app.get('*', (req, res, next) => {
+      if (req.path === '/api' || req.path.startsWith('/api/')) return next();
+      res.sendFile(resolve(webRoot, 'index.html'));
+    });
+  }
   app.use((_req, res) => {
     res
       .status(404)

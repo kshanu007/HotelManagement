@@ -3,6 +3,7 @@ export const env = z
   .object({
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     PORT: z.coerce.number().default(5000),
+    TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
     MONGODB_URI: z.string().min(1),
     WEB_ORIGIN: z.string().url(),
     JWT_SECRET: z.string().min(48),
