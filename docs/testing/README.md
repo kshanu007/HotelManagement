@@ -1,0 +1,9 @@
+# Testing
+
+`npm test` covers integer arithmetic, payment allocations, dates, validation, and table behavior. `npm run test:integration` starts an isolated single-node MongoDB replica set and exercises real Express requests with Supertest. It verifies login, tenant isolation, ownership, subscriptions, attendance/leave, partial and advance payments, vendor balances, report/export reconciliation, refresh rotation/reuse, and Origin protection. It also checks concurrent retries, refunds, historical corrections, customer/vendor ledger reconciliation, earned revenue across years with paise remainders, plan-wise platform revenue, subscription expiry/suspension, immediate logout revocation, one-use password resets, password changes, and audited extensions.
+
+`npm run test:e2e` starts an isolated database/API and a Vite server. Playwright checks owner login, customer creation, meal-plan assignment, partial collection, receipt details, theme persistence, mobile overflow, absence of tokens in localStorage, account-switch cache isolation, and platform hotel/report navigation. Test credentials exist only in that disposable database. Chromium must be installed with `npx playwright install chromium`.
+
+Use Node 24 LTS. First MongoDB test startup needs network access and sufficient download space. Docker is unnecessary for automated tests. Tests must not run against a production URI. CI runs all quality commands; actual local results are recorded in PROGRESS.md.
+
+When the development app is already running, set `E2E_API_PORT=5100` and `E2E_WEB_PORT=5180` in the test terminal before `npm run test:e2e`. Browser tests then start their isolated API/Vite servers on those ports; they do not reuse the real application or its database. Owner coverage also exercises grouped mess navigation, contextual customer actions, renewal start-date prefilling, legacy links, clearing customer filters, and nested receipt print output.

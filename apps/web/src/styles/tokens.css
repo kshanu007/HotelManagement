@@ -1,0 +1,32 @@
+:root {
+  --background: 40 30% 97%;
+  --foreground: 160 15% 16%;
+  --card: 0 0% 100%;
+  --card-foreground: 160 15% 16%;
+  --primary: 161 38% 26%;
+  --primary-hover: 161 38% 20%;
+  --primary-foreground: 40 30% 98%;
+  --secondary: 37 33% 91%;
+  --accent: 28 62% 49%;
+  --muted: 40 18% 94%;
+  --muted-foreground: 155 5% 45%;
+  --border: 40 15% 87%;
+  --success: 150 46% 34%;
+  --warning: 33 80% 43%;
+  --destructive: 0 64% 47%;
+  --info: 207 55% 42%;
+  --radius: 0.8rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --font-body: 'Noto Sans', 'Nirmala UI', system-ui, sans-serif;
+  --font-display: Georgia, 'Noto Serif Devanagari', serif;
+  --text-small: 0.8rem;
+  --text-body: 0.9rem;
+  --text-title: 2rem;
+  --shadow: 0 2px 6px hsl(160 20% 10% / 0.025);
+  --transition: 150ms ease;
+}

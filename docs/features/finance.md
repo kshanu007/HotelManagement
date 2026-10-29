@@ -1,0 +1,19 @@
+# Financial rules
+
+Money is stored as integer paise, never floating-point rupees. Rupee input is parsed using decimal string segments and BigInt. Formatting divides by 100 for display only. Quantities currently use whole units; choose grams/millilitres for fractional kilogram/litre purchases.
+
+An assignment creates a subscription and a distinct invoice in one transaction. Existing advances are applied before the invoice is exposed. Overlapping periods are rejected. Invoice total is the plan price snapshot, not a mutable plan lookup.
+
+Collections allocate FIFO to open invoices; the remainder becomes an advance. Purchases and vendor payments follow the same strategy. Payments do not create revenue a second time. An idempotency key plus request fingerprint prevents retry duplication. Reusing a key with different data produces a conflict. Account writes cause concurrent transactions to retry, preventing lost advances and duplicate allocations.
+
+Manual credits are linked to a subscription and cannot cumulatively exceed its invoice. A credit reduces that invoice's billed entitlement; existing money is reallocated and released overpayments become advances. Credits are recognised as a revenue reduction on their grant business date. Extensions change the subscription end date with an audit trail and reject overlap. A free extension does not change the invoice's original service-period or price snapshot.
+
+Daily hotel sales exclude mess collections. The sum of dine-in, parcel and other sales must equal cash plus UPI. Purchases are an incurred cost, vendor payments are cash outflow, and operating expenses are separately recorded cash expenses. Reports never add purchases and vendor payments together as incurred expense.
+
+Earned subscription revenue is recognised across the invoice's inclusive service dates. Cumulative integer recognition uses `floor(price × elapsed days / service days)`; period revenue is the difference of cumulative recognition at both boundaries. The final service day retains the rounding remainder. This correctly handles subscriptions crossing months and years. Profit uses earned mess revenue, less granted credits, plus hotel sales, minus purchases incurred and operating expenses. Gross billing, invoice-basis profit, and cash collections remain separate metrics. There is no inventory/COGS module; purchase costs are incurred on their purchase business date.
+
+Customer, vendor and SaaS refunds are separate immutable records linked to an original payment. Total refunds cannot exceed that receipt's amount. Refunds reduce net cash collection/payment without silently reducing a subscription's billed price. Issue a customer credit separately if a refund also reduces the agreed charge. Reconciliation rebuilds derived allocations, dues and advances from original receipts, refunds and credits. Original receipts and their original allocation snapshots are retained.
+
+Expense, sale and purchase edits create replacements rather than overwriting history. A correction reason is mandatory. The original is linked to its replacement and excluded from current totals; a FinancialCorrection record and audit event retain the old values. Vendor dues are reconciled when a purchase changes. Archived originals remain readable through their tenant-scoped detail endpoint.
+
+Reports use one validated date/filter context for screen and exports. Outstanding balances are all-time; the UI says so. Service periods govern earned revenue, invoice dates govern billing, and transaction dates govern net cash collections. Vendor ledgers combine purchases, payments and refunds, including a running balance brought forward from earlier transactions. Exports stream database rows in batches and Excel uses a streaming workbook. CSV spreadsheet formula prefixes are escaped. Print opens the complete filtered PDF, rather than printing only a paginated table.

@@ -1,0 +1,113 @@
+@import './tokens.css';
+@import './themes.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition:
+      background var(--transition),
+      border-color var(--transition);
+  }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 3px;
+  }
+  input,
+  select,
+  textarea {
+    @apply w-full rounded-lg border bg-card px-3 py-2 text-sm;
+  }
+  label {
+    @apply text-sm font-medium;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.025em;
+  }
+  button:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+}
+@layer components {
+  .card {
+    @apply rounded-lg border bg-card p-5;
+    box-shadow: var(--shadow);
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-widest text-muted-foreground;
+  }
+  .page-title {
+    font-family: var(--font-display);
+    @apply text-3xl md:text-4xl;
+  }
+  .field {
+    @apply flex flex-col gap-1.5;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-xs font-medium;
+  }
+  .empty {
+    @apply py-16 text-center text-muted-foreground;
+  }
+}
+dialog {
+  max-height: 90vh;
+  overflow: auto;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+dialog::backdrop {
+  background: hsl(160 20% 8% / 0.5);
+  backdrop-filter: blur(3px);
+}
+@media print {
+  body:has(dialog[open]) main > :not(dialog[open]):not(:has(dialog[open])),
+  body:has(dialog[open]) main :has(dialog[open]) > :not(dialog[open]):not(:has(dialog[open])) {
+    display: none !important;
+  }
+  dialog[open] {
+    position: static;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    border: 0;
+    box-shadow: none;
+  }
+  aside,
+  header,
+  nav,
+  button,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .card {
+    break-inside: avoid;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+}

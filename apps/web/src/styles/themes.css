@@ -1,0 +1,16 @@
+.dark {
+  --background: 160 16% 9%;
+  --foreground: 40 18% 91%;
+  --card: 160 14% 12%;
+  --card-foreground: 40 18% 91%;
+  --primary: 156 37% 62%;
+  --primary-hover: 156 37% 70%;
+  --primary-foreground: 160 20% 10%;
+  --secondary: 160 12% 18%;
+  --muted: 160 12% 16%;
+  --muted-foreground: 150 8% 64%;
+  --border: 160 12% 23%;
+  --success: 150 48% 62%;
+  --warning: 35 80% 65%;
+  --destructive: 0 70% 68%;
+}
